@@ -6,9 +6,8 @@ export enum CharEnum {
   separator = "X",
 }
 
-export const Pollux = {
-  encrypt(plaintext: string, key: Record<string, number[]>) {
-    // TODO
+export abstract class Pollux {
+  static encrypt(plaintext: string, key: Record<string, number[]>) {
     let result: string = "";
 
     for (let i = 0; i < plaintext.length; i++) {
@@ -35,16 +34,15 @@ export const Pollux = {
       result += nums[idx];
     }
 
-    // idk if the final separator at the end is needed? maybe just splice the end if needed
-    return result;
-  },
-  decrypt(ciphertext: string, key: Record<string, number[]>) {
+    // There is alwyas an extra separator at the end, so remove
+    return result.slice(0, -1);
+  }
+  static decrypt(ciphertext: string, key: Record<string, number[]>) {
     const keyString: string = createString(key);
     let decrypted: string = "";
     let result: string = "";
 
-    // there is always an extra separator at the end, so dont convert that, ill fix this in the future
-    for (let i = 0; i < ciphertext.length - 1; i++) {
+    for (let i = 0; i < ciphertext.length; i++) {
       const strIndex = parseInt(ciphertext[i]);
       result += keyString[strIndex];
     }
@@ -62,10 +60,10 @@ export const Pollux = {
       decrypted += " ";
     }
     return decrypted;
-  },
-};
+  }
+}
 
-// Transforms the record into a string
+// Transforms the key record into a string
 function createString(key: Record<string, number[]>): string {
   let result = Array.from({ length: 10 });
   for (const char in key) {
