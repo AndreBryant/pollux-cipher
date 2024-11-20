@@ -37,6 +37,7 @@ export abstract class Pollux {
     // There is alwyas an extra separator at the end, so remove
     return result.slice(0, -1);
   }
+
   static decrypt(ciphertext: string, key: Record<string, number[]>) {
     const keyString: string = createString(key);
     let decrypted: string = "";
@@ -77,6 +78,7 @@ function createString(key: Record<string, number[]>): string {
 
 // https://stackoverflow.com/a/1527820/25684936
 function getRandomInt(min: number, max: number) {
+  // Inclusive
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
