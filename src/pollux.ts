@@ -1,41 +1,26 @@
-import { MORSE_CODES } from "./utils";
-
-export enum CharEnum {
-  dash = "-",
-  dot = ".",
-  separator = "X",
-}
+import { MORSE_CODES, CharEnum, getRandomInt, createString } from "./utils";
 
 export abstract class Pollux {
   static encrypt(plaintext: string, key: Record<string, number[]>) {
     let result: string = "";
 
-    for (let i = 0; i < plaintext.length; i++) {
-      const char = plaintext[i].toUpperCase();
+    for (const char of plaintext) {
+      const morseCode = MORSE_CODES[char.toUpperCase()];
+      for (const code of morseCode) {
+        const nums = key[code];
+        const randomIndex = getRandomInt(0, nums.length - 1);
+        result += nums[randomIndex];
+      }
 
-      if (char === " ") {
+      if (char !== " ") {
+        // Add a separator
         const nums = key[CharEnum.separator];
-        const idx = getRandomInt(0, nums.length - 1);
-        result += nums[idx];
-        continue;
+        const randomIndex = getRandomInt(0, nums.length - 1);
+        result += nums[randomIndex];
       }
-
-      const morseCode = MORSE_CODES[char];
-
-      for (const char of morseCode) {
-        const nums = key[char];
-        const idx = getRandomInt(0, nums.length - 1);
-
-        result = result + nums[idx];
-      }
-
-      const nums = key[CharEnum.separator];
-      const idx = getRandomInt(0, nums.length - 1);
-      result += nums[idx];
     }
 
-    // There is alwyas an extra separator at the end, so remove
-    return result.slice(0, -1);
+    return result.slice(0, -1); // remove the extra separator at the end
   }
 
   static decrypt(ciphertext: string, key: Record<string, number[]>) {
@@ -43,8 +28,8 @@ export abstract class Pollux {
     let decrypted: string = "";
     let result: string = "";
 
-    for (let i = 0; i < ciphertext.length; i++) {
-      const strIndex = parseInt(ciphertext[i]);
+    for (const num of ciphertext) {
+      const strIndex = parseInt(num);
       result += keyString[strIndex];
     }
     const words = result.split(CharEnum.separator.repeat(2));
@@ -62,24 +47,4 @@ export abstract class Pollux {
     }
     return decrypted;
   }
-}
-
-// Transforms the key record into a string
-function createString(key: Record<string, number[]>): string {
-  let result = Array.from({ length: 10 });
-  for (const char in key) {
-    const nums = key[char];
-    for (const idx of nums) {
-      result[idx] = char;
-    }
-  }
-  return result.join("");
-}
-
-// https://stackoverflow.com/a/1527820/25684936
-function getRandomInt(min: number, max: number) {
-  // Inclusive
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
 }

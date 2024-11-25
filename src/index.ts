@@ -1,17 +1,28 @@
-import { Pollux, CharEnum } from "./pollux";
-
+import { CharEnum } from "./utils";
+import { Pollux } from "./pollux";
 const key: Record<string, number[]> = {
   [CharEnum.dash]: [0, 2, 4],
-  [CharEnum.dot]: [1, 3, 5, 6],
-  [CharEnum.separator]: [7, 8, 9],
+  [CharEnum.dot]: [1, 3, 5],
+  [CharEnum.separator]: [6, 7, 8, 9],
 };
 
-const message =
-  "MISS ZARVES WAS VERY GOOD AT DRAWING SHAPES. WHEN MOST PEOPLE TRY TO DRAW HEPTAGONS, THERE IS ALWAYS ONE SIDE THAT STICKS OUT FUNNY. BUT MISS ZARVES'S HEPTAGON WAS PERFECT. EVERY SIDE WAS THE SAME LENGTH, AND EVERY ANGLE THE SAME DEGREE.";
-const encrypted = Pollux.encrypt(message, key);
-const decrypted = Pollux.decrypt(encrypted, key);
+// const message: string = "Hi RIN";
+const message: string =
+  "MISs ZARvES WaS VErY GOoD At DrAWING ShAPES. WhEN mOST PEoPLE TrY To dRAW HEPTaGONS, THERe Is ALWAyS OnE SiDE THaT STIcKS OuT fUNNY. bUT MiSS zARVES'S HEPTAgON WAs PErFECT. EVeRY SiDE wAS ThE SAmE LENgTH, AnD EVErY AnGLE tHE sAME DEgREE.";
 
-console.log("Encrypted String: ");
+// Log message and key
+console.log("Message: ");
+console.log(message);
+console.log();
+
+// encrypted
+const encrypted = Pollux.encrypt(message, key);
+console.log("Encrypted: ");
 console.log(encrypted);
-console.log("Decrypted String: ");
+console.log();
+
+// decrypted
+const decrypted = Pollux.decrypt(encrypted, key);
+console.log("Decrypted: ");
 console.log(decrypted);
+console.log();
